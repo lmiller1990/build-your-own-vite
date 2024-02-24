@@ -25,7 +25,7 @@ watcher.on("change", (file) => {
   socket?.send(
     JSON.stringify({
       type: "file:changed",
-      file,
+      file: `/${file}`,
     })
   );
 });
@@ -41,7 +41,7 @@ const hmrMiddleware = async (req, res, next) => {
   content = `
   ${client}
 
-  import.meta.file = "${req.url.slice(1)}"
+  import.meta.file = "${req.url}"
   hmrClient(import.meta)
 
   ${content}`;

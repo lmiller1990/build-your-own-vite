@@ -17,7 +17,7 @@ class HotModule {
       return;
     }
     // 1. get new module
-    const mod = await import(`/${this.url}?t=${Date.now()}`);
+    const mod = await import(`${this.url}?t=${Date.now()}`);
     this.acceptCb(mod);
   }
 }
@@ -31,6 +31,7 @@ window.ws ??= new WebSocket("ws://localhost:8080");
 function connectWs(mod) {
   window.ws.addEventListener("message", (payload) => {
     const data = JSON.parse(payload.data);
+    console.log(data);
     if (data.type === "file:changed") {
       if (data.file === mod.file) {
         const mod = window.hotModules.get(data.file);
@@ -42,7 +43,7 @@ function connectWs(mod) {
 
 function hmrClient(mod) {
   const urlObj = new URL(mod.url);
-  const url = urlObj.pathname.slice(1);
+  const url = urlObj.pathname;
   const hotMod = new HotModule(url);
   window.hotModules.set(url, hotMod);
 
